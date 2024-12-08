@@ -1,6 +1,6 @@
 import re
 
-find = False
+
 def initializeBlocks(blocks=[],ROW=5,COL=5) :
     for i in range (ROW) :
         col = [];
@@ -231,8 +231,8 @@ def crossWordSolver(i,j,blocks=[[]],input=[],count=20) :
 
     if count == 0 :
         print("win")
-        find = True
-        return
+   
+        return True
     
     for word in getHorizontalWordCandidate(i,j,blocks,input) :
         
@@ -250,10 +250,11 @@ def crossWordSolver(i,j,blocks=[[]],input=[],count=20) :
          x,y = getNextIndex(i,j,blocks)  
          
          count = count - realLength
-         crossWordSolver(x,y,blocks,input,count) 
+         check = crossWordSolver(x,y,blocks,input,count) 
+         if (check) :
+             return True
          
-         if  getCount(0,0,blocks)  == 0 :
-             return
+
          
          count += realLength
         
@@ -278,10 +279,12 @@ def crossWordSolver(i,j,blocks=[[]],input=[],count=20) :
          x,y = getNextIndex(i,j,blocks)  
          
          count = count - realLength
-         crossWordSolver(x,y,blocks,input,count) 
+         check = crossWordSolver(x,y,blocks,input,count) 
          
-         if getCount(0,0,blocks) == 0 :
-             return
+         if (check):
+             return True
+         
+
          
          count += realLength
          for (l,m) in changedValues :
@@ -289,28 +292,29 @@ def crossWordSolver(i,j,blocks=[[]],input=[],count=20) :
          
          
 
-    return
+    return False
 
 
 ROW,COL = (5,5)
-input = ["drat","rat","bat","cat","at","arc","this","that","can","atm"]
-
-# blocks = [
-#           ['-','-','-','-','#'],
-#           ['-','-','-','#','-'],
-#           ['-','-','-','#','-'],
-#           ['-','#','#','#','-'],
-#           ['#','-','-','-','-'],
-#         ]
-
+input = ["drat","rat","bat","cat","at","arc","this","that","can", "atm"]
 
 blocks = [
-          ['#','-','-','-','#'],
+          ['-','-','-','-','#'],
           ['-','-','-','#','-'],
           ['-','-','-','#','-'],
           ['-','#','#','#','-'],
-          ['#','-','-','#','-'],
+          ['#','-','-','-','-'],
         ]
+
+
+# blocks = [
+#           ['#','-','-','-','#'],
+#           ['-','-','-','#','-'],
+#           ['-','-','-','#','-'],
+#           ['-','#','#','#','-'],
+#           ['#','-','-','#','-'],
+#         ]
+
 
 
 # blocks = [
