@@ -1,6 +1,6 @@
 import re
 
-
+find = False
 def initializeBlocks(blocks=[],ROW=5,COL=5) :
     for i in range (ROW) :
         col = [];
@@ -228,28 +228,37 @@ def getCount (i,j,blocks=[[]]):
     
 def crossWordSolver(i,j,blocks=[[]],input=[],count=20) :
     
+
     if count == 0 :
         print("win")
+        find = True
         return
     
     for word in getHorizontalWordCandidate(i,j,blocks,input) :
         
          leftIndex,rightIndex = getHorizontalRangeIndex(i,j,blocks) 
          values = [char for char in word]
+         
+         changedValues = []
+         for chgVal in range(rightIndex - leftIndex + 1 ):
+             if blocks[i][leftIndex + chgVal] == '-' :
+                changedValues.append((i,leftIndex+chgVal))
+         
          setHorizontalValues(i,leftIndex,leftIndex,rightIndex,blocks,values)   
-         realLength = rightIndex - j + 1
+         realLength = len(changedValues)
+         
          x,y = getNextIndex(i,j,blocks)  
          
+         count = count - realLength
+         crossWordSolver(x,y,blocks,input,count) 
          
-         crossWordSolver(x,y,blocks,input,count - realLength) 
-         
-         if count == 0 :
+         if  getCount(0,0,blocks)  == 0 :
              return
          
          count += realLength
-         values = ['-'] * realLength
-         
-         setHorizontalValues(i,j,1,realLength,blocks,values)   
+        
+         for (l,m) in changedValues :
+             blocks[l][m] = '-'
     
 
 
@@ -258,45 +267,50 @@ def crossWordSolver(i,j,blocks=[[]],input=[],count=20) :
          bottom,upper = getVerticalRangeIndex(i,j,blocks) 
          values = [char for char in word]
          
+         changedValues = []
+         for chgVal in range(upper - bottom + 1 ):
+             if blocks[bottom + chgVal][j] == '-' :
+                changedValues.append((bottom+chgVal,j))
+         
          setVerticalValues(bottom,j,bottom,upper,blocks,values)   
          
-         realLength = upper - i + 1
+         realLength =len(changedValues)
          x,y = getNextIndex(i,j,blocks)  
          
+         count = count - realLength
+         crossWordSolver(x,y,blocks,input,count) 
          
-         crossWordSolver(x,y,blocks,input,count - realLength) 
-         
-         if count == 0 :
+         if getCount(0,0,blocks) == 0 :
              return
          
          count += realLength
-         values = ['-'] * realLength
+         for (l,m) in changedValues :
+             blocks[l][m] = '-'
          
-         setVerticalValues(i,j,1,realLength,blocks,values)     
-
+         
 
     return
 
 
 ROW,COL = (5,5)
-input = ["drat","rat","bat","cat","at","arc","this","that","can"]
-
-# blocks = [
-#           ['-','-','-','-','#'],
-#           ['-','-','-','#','-'],
-#           ['-','-','-','#','-'],
-#           ['-','#','#','#','-'],
-#           ['#','-','-','-','-'],
-#         ]
-
+input = ["drat","rat","bat","cat","at","arc","this","that","can","atm"]
 
 blocks = [
-          ['-','-','-','#','#'],
-          ['-','#','-','#','-'],
+          ['-','-','-','-','#'],
           ['-','-','-','#','-'],
-          ['#','#','#','#','-'],
+          ['-','-','-','#','-'],
+          ['-','#','#','#','-'],
           ['#','-','-','-','-'],
         ]
+
+
+# blocks = [
+#           ['-','-','-','#','#'],
+#           ['-','#','-','#','-'],
+#           ['-','-','-','#','-'],
+#           ['#','#','#','#','-'],
+#           ['#','-','-','-','-'],
+#         ]
 
 #initializeBlocks(blocks,ROW,COL)
 #setVerticalValues(0,0,0,3,blocks,['*',"*","*","*"])
