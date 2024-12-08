@@ -295,12 +295,21 @@ def crossWordSolver(i,j,blocks=[[]],input=[],count=20) :
 ROW,COL = (5,5)
 input = ["drat","rat","bat","cat","at","arc","this","that","can","atm"]
 
+# blocks = [
+#           ['-','-','-','-','#'],
+#           ['-','-','-','#','-'],
+#           ['-','-','-','#','-'],
+#           ['-','#','#','#','-'],
+#           ['#','-','-','-','-'],
+#         ]
+
+
 blocks = [
-          ['-','-','-','-','#'],
+          ['#','-','-','-','#'],
           ['-','-','-','#','-'],
           ['-','-','-','#','-'],
           ['-','#','#','#','-'],
-          ['#','-','-','-','-'],
+          ['#','-','-','#','-'],
         ]
 
 
@@ -326,5 +335,6 @@ blocks = [
 #print(getVerticalWordCandidate(4,4,blocks,input))
 count = getCount(0,0,blocks)
 
-crossWordSolver(0,0,blocks,input,count)
+(i,j) = getNextIndex(0,0,blocks)
+crossWordSolver(i,j,blocks,input,count)
 printArray(blocks)
